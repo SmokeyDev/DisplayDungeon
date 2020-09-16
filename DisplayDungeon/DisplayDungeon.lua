@@ -2,89 +2,116 @@
 --    DisplayDungeon - Created by Smokey - https://smokeydev.pl/     --
 -----------------------------------------------------------------------
 
---------------------------------------------------
---    Description:
---    This simple AddOn shows a small text under a minimap
---    which shows current RDF queue status.
---    Example: "Dungeon: 3/5"
---    You no longer have to hover queue icon
---    to check RDF status!
---    You can change text color and duration
---    in the config below.
---------------------------------------------------
+-- Display handler
 
--- Config
-local Config = {}
-Config.Color = {
-   ['red'] = false,
-   ['pink'] = false,
-   ['purple'] = false,
-   ['blue'] = false,
-   ['cyan'] = false,
-   ['green'] = false,
-   ['yellow'] = true -- active
-}
+local tankFrame = CreateFrame("Frame", nil, UIParent)
+tankFrame:SetSize(20, 20)
+tankFrame:SetPoint("TOPRIGHT", -118, -175)
+local tankTxd = tankFrame:CreateTexture()
+tankTxd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\tank")
+tankTxd:SetPoint("CENTER")
+tankTxd:SetSize(20, 20)
 
--- Variables
-local DisplayDungeon = {}
-DisplayDungeon.Colors = {
-    ['red'] = 'ff0000',
-    ['pink'] = 'ff00dd',
-    ['purple'] = '9000ff',
-    ['blue'] = '0033ff',
-    ['cyan'] = '00fff7',
-    ['green'] = '0dff00',
-    ['yellow'] = 'fff700'
-}
+local healFrame = CreateFrame("Frame", nil, UIParent)
+healFrame:SetSize(20, 20)
+healFrame:SetPoint("TOPRIGHT", -97, -175)
+local healTxd = healFrame:CreateTexture()
+healTxd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\healer")
+healTxd:SetPoint("CENTER")
+healTxd:SetSize(20, 20)
 
--- Text display handler
+local dps1Frame = CreateFrame("Frame", nil, UIParent)
+dps1Frame:SetSize(20, 20)
+dps1Frame:SetPoint("TOPRIGHT", -76, -175)
+local dps1Txd = dps1Frame:CreateTexture()
+dps1Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dps")
+dps1Txd:SetPoint("CENTER")
+dps1Txd:SetSize(20, 20)
 
-local f1 = CreateFrame("Frame", nil, UIParent)
-f1:SetWidth(1) 
-f1:SetHeight(1) 
-f1:SetAlpha(.90)
-f1:SetPoint("RIGHT", -80, 260)
-f1.text = f1:CreateFontString(nil, "ARTWORK") 
-f1.text:SetFont("Fonts\\ARIALN.ttf", 15, "THICKOUTLINE")
-f1.text:SetPoint("Right", 0, 0)
-f1:Hide()
+local dps2Frame = CreateFrame("Frame", nil, UIParent)
+dps2Frame:SetSize(20, 20)
+dps2Frame:SetPoint("TOPRIGHT", -55, -175)
+local dps2Txd = dps2Frame:CreateTexture()
+dps2Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dps")
+dps2Txd:SetPoint("CENTER")
+dps2Txd:SetSize(20, 20)
 
--- Updating display text
-
-function displayupdate(show, message)
-    if show then
-        f1.text:SetText(message)
-        f1:Show()
-    else
-        f1:Hide()
-    end
-end
+local dps3Frame = CreateFrame("Frame", nil, UIParent)
+dps3Frame:SetSize(20, 20)
+dps3Frame:SetPoint("TOPRIGHT", -34, -175)
+local dps3Txd = dps3Frame:CreateTexture()
+dps3Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dps")
+dps3Txd:SetPoint("CENTER")
+dps3Txd:SetSize(20, 20)
  
 -- Actual script stuff
 
-f1:RegisterEvent("LFG_UPDATE")
-f1:RegisterEvent("LFG_PROPOSAL_SUCCEEDED")
-f1:RegisterEvent("LFG_PROPOSAL_SHOW")
-f1:RegisterEvent("LFG_PROPOSAL_FAILED")
-f1:RegisterEvent("LFG_PROPOSAL_UPDATE")
-f1:RegisterEvent("LFG_QUEUE_STATUS_UPDATE")
-f1:RegisterEvent("PARTY_MEMBERS_CHANGED")
-f1:RegisterEvent("UPDATE_LFG_LIST")
-DisplayDungeon.Text = function(self, event, ...)
-    if event == "LFG_PROPOSAL_SHOW" or event == "LFG_PROPOSAL_SUCCEEDED" then -- stop queue text
-        displayupdate(false)
-    else -- re/start queue text
-        local inParty, joined, queued, noPartialClear, achievements, lfgComment, slotCount = GetLFGInfoServer()
-        if queued then
-            local hasData,  leaderNeeds, tankNeeds, healerNeeds, dpsNeeds, totalTanks, totalHealers, totalDPS, instanceType, instanceSubType, instanceName, averageWait, tankWait, healerWait, damageWait, myWait, queuedTime = GetLFGQueueStats();
-            tankNeeds = tankNeeds or 1
-            healerNeeds = healerNeeds or 1
-            dpsNeeds = dpsNeeds or 3
-            local slotCount = 5 - tankNeeds - healerNeeds - dpsNeeds
-            displayupdate(true, "|cff"..DisplayDungeon.Colors[Config.Color].."Dungeon: "..tostring(slotCount).."/5")
+function display(show, tank, heal, dps)
+    if not show then
+        tankFrame:Hide()
+        healFrame:Hide()
+        dps1Frame:Hide()
+        dps2Frame:Hide()
+        dps3Frame:Hide()
+    else
+        tankFrame:Show()
+        healFrame:Show()
+        dps1Frame:Show()
+        dps2Frame:Show()
+        dps3Frame:Show()
+        if tank == 0 then
+            tankTxd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\tankReady")
         else
-            displayupdate(false)
+            tankTxd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\tank")
+        end
+        if heal == 0 then
+            healTxd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\healerReady")
+        else
+            healTxd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\healer")
+        end
+        if dps == 0 then
+            dps1Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dpsReady")
+            dps2Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dpsReady")
+            dps3Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dpsReady")
+        elseif dps == 1 then
+            dps1Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dps")
+            dps2Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dpsReady")
+            dps3Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dpsReady")
+        elseif dps == 2 then
+            dps1Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dps")
+            dps2Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dps")
+            dps3Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dpsReady")
+        else
+            dps1Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dps")
+            dps2Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dps")
+            dps3Txd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\dps")
         end
     end
 end
-f1:SetScript("OnEvent", DisplayDungeon.Text)
+
+tankFrame:RegisterEvent("LFG_UPDATE")
+tankFrame:RegisterEvent("LFG_PROPOSAL_SUCCEEDED")
+tankFrame:RegisterEvent("LFG_PROPOSAL_SHOW")
+tankFrame:RegisterEvent("LFG_PROPOSAL_FAILED")
+tankFrame:RegisterEvent("LFG_PROPOSAL_UPDATE")
+tankFrame:RegisterEvent("LFG_QUEUE_STATUS_UPDATE")
+tankFrame:RegisterEvent("PARTY_MEMBERS_CHANGED")
+tankFrame:RegisterEvent("UPDATE_LFG_LIST")
+Display = function(self, event, ...)
+    if event == "LFG_PROPOSAL_SHOW" or event == "LFG_PROPOSAL_SUCCEEDED" then -- stop queue text
+        display(false)
+    else -- re/start queue text
+        local inParty, joined, queued, noPartialClear, achievements, lfgComment, slotCount = GetLFGInfoServer()
+        if queued then
+            local hasData, leaderNeeds, tankNeeds, healerNeeds, dpsNeeds, totalTanks, totalHealers, totalDPS, instanceType, instanceSubType, instanceName, averageWait, tankWait, healerWait, damageWait, myWait, queuedTime = GetLFGQueueStats();
+            tankNeeds = tankNeeds or 1
+            healerNeeds = healerNeeds or 1
+            dpsNeeds = dpsNeeds or 3
+            display(true, tankNeeds, healerNeeds, dpsNeeds)
+        else
+            display(false)
+        end
+    end
+end
+tankFrame:SetScript("OnEvent", Display)
+display(false)
