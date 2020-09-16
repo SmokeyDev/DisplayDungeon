@@ -5,10 +5,13 @@
     This AddOn might work on older on newer versions of WoW. Tested on 3.3.5a
 
 # Description:
-    This simple AddOn shows a small text under a minimap
+    This simple AddOn shows small icons under a minimap
     which shows current RDF queue status.
     Example: "Dungeon: 3/5"
     You no longer have to hover queue icon to check RDF status!
+
+# Screenshot:
+    ![Screenshot](https://i.imgur.com/J6jCcHs.png)
 
 # Installation:
     Drop "DisplayDungeon" folder inside your AddOns directory.
