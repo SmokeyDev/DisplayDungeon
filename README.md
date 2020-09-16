@@ -11,7 +11,7 @@
     You no longer have to hover queue icon to check RDF status!
 
 # Screenshot:
-    ![Screenshot](https://i.imgur.com/J6jCcHs.png)
+![Screenshot](https://i.imgur.com/J6jCcHs.png)
 
 # Installation:
     Drop "DisplayDungeon" folder inside your AddOns directory.
