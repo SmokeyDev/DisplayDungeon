@@ -59,6 +59,11 @@ function display(show, tank, heal, dps)
         dps1Frame:Show()
         dps2Frame:Show()
         dps3Frame:Show()
+        tankTxd:Show()
+        healTxd:Show()
+        dps1Txd:Show()
+        dps2Txd:Show()
+        dps3Txd:Show()
         if tank == 0 then
             tankTxd:SetTexture("Interface\\Addons\\DisplayDungeon\\Textures\\tankReady")
         else
@@ -115,3 +120,4 @@ Display = function(self, event, ...)
 end
 tankFrame:SetScript("OnEvent", Display)
 display(false)
+print("|cffff00ddDisplayDungeon loaded. Good luck!|r")
