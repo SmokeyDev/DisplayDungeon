@@ -10,6 +10,9 @@
     Example: "Dungeon: 3/5"
     You no longer have to hover queue icon to check RDF status!
 
+# Config:
+    Check "DisplayDungeon_Config.lua" file to configure position of the widget.
+
 # Screenshot:
 ![Screenshot](https://i.imgur.com/J6jCcHs.png)
 

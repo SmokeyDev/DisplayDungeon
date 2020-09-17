@@ -8,4 +8,5 @@
 ## SavedVariablesPerCharacter: 
 ## SavedVariables: 
 
+DisplayDungeon_Config.lua
 DisplayDungeon.lua
